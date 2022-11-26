@@ -1,0 +1,99 @@
+---
+title: "Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hw3packageWithRcpp)
+```
+
+## Introduction
+
+Welcome to my `hw3packageWithRcpp` package!     
+
+<<<<<<< HEAD
+`hw3packageWithRcpp` is a package for generalized linear model and two related metrics.     
+=======
+`hw3packageWithRcpp` is a package for generalized linear model and related metrics.     
+>>>>>>> a97c631 (two functions)
+
+The function `lrm` can give the coefficients and the fitted value according to a matrix of covariates, response vector.     
+
+The function `R2` compute R squared value using Rcpp.    
+
+<<<<<<< HEAD
+The function `mape` compute R mean absolute percentage error using Rcpp.    
+=======
+>>>>>>> a97c631 (two functions)
+
+We will verify the correctness and efficiency of the 3 functions in this tutorial. 
+
+
+## `lrm`
+
+We verify the function `lrm`  with original function `glm` from R package `stats`.   
+
+We use R buil-in data `mtcars` to verify this function. The first column `mpg` will be the response vector `y` and the rest of the columns will be `X`. 
+```{r}
+#response
+mpg = mtcars[, 1]
+#covariates
+X = as.matrix(mtcars[, -1])
+```
+
+coefficients
+```{r}
+library(stats)
+all.equal(as.vector(lrm(X, mpg)$beta), 
+          as.vector(glm(mpg ~ ., data = mtcars, family = "gaussian")$coefficients))
+```
+
+fitted.values
+```{r}
+all.equal(as.vector(lrm(X, mpg)$y.fitted), 
+          as.vector(glm(mpg ~ ., data = mtcars, family = "gaussian")$fitted.values))
+```
+Check the efficiency.
+```{r}
+library(bench)
+plot(mark(as.vector(lrm(X, mpg)$beta), 
+          as.vector(glm(mpg ~ ., data = mtcars, family = "gaussian")$coefficients)))
+```
+
+This shows that `lrm` is correct and more efficient than the original function.  
+
+
+## `R2`
+We simulate data with true value and fitted value from regression model.
+```{r}
+x = 1:1000
+y = 5*x + rnorm(1000, 0, 1000)
+fit = lm(y ~ x)
+```
+
+`R2_Score` from R package `MLmetrics` is used to check the correctness of the function.
+Check the correctness.
+```{r}
+all.equal(R2(fit$fitted.values, y),
+          MLmetrics::R2_Score(fit$fitted.values, y))
+```
+Check the efficiency.
+```{r}
+plot(mark(R2(fit$fitted.values, y),
+          MLmetrics::R2_Score(fit$fitted.values, y)))
+```
+
+This shows that `R2` is correct and more efficient than the original function. 
+
+

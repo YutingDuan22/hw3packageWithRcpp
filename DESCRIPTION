@@ -1,0 +1,26 @@
+Package: hw3packageWithRcpp
+Type: Package
+Title: Multilinear Regression Model and R^2 Computation
+Version: 1.0
+Date: 2022-11-24
+Author: Yuting Duan
+Maintainer: Yuting Duan <yutingd@umich.edu>
+Description: This package study linear model and related metrics. 
+        The function `lrm` give coefficients and fitted value of multilinear models
+        The function  R2 use Rcpp and compute R squared value.
+License: GPL (>= 2)
+Imports: 
+    Rcpp,
+    MLmetrics,
+    methods,
+    bench
+LinkingTo: Rcpp
+RoxygenNote: 7.2.1
+Encoding: UTF-8
+Suggests: 
+    covr,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3

@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
+^\.github$
+<<<<<<< HEAD
+=======
+^codecov\.yml$
+>>>>>>> a97c631 (two functions)
